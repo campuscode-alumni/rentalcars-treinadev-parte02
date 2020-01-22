@@ -20,11 +20,17 @@ describe 'CarModel Management' do
       expect(response).to have_http_status(:not_found)
     end
   end
-end
 
-'{
-  "name": "Uno",
-  "fuel_type_id": 1,
-  "manufacturer_id": 1,
-  "car_options": "ar condicionado"
-}'
+  context 'index' do
+    it 'renders correctly' do
+      car_models = create_list(:car_model, 3)
+
+      get api_v1_car_models_path
+      json = JSON.parse(response.body, symbolize_names: true)
+
+      expect(json.first[:name]).to eq(car_models.first.name)
+      expect(json.second[:name]).to eq(car_models.second.name)
+      expect(json.third[:name]).to eq(car_models.third.name)
+    end
+  end
+end
